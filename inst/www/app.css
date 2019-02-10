@@ -1,0 +1,10 @@
+.tab-pane {
+  height: 700px;
+  overflow-y: scroll;
+}
+
+#download {
+  color: #444;
+  margin-top: 30px;
+  margin-left: 15px;
+}
