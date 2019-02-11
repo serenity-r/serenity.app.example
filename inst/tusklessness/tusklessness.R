@@ -59,7 +59,7 @@ ui <- dashboardPage(
 
       # Third tab content
       tabItem(tabName = "explore",
-              serenityVizUI(id = "explore", dataset = dataset, height="700px")
+              serenityVizUI(id = "explore", dataset = dataset, showcode = FALSE, height="700px")
       ),
 
       # Third tab content
@@ -67,17 +67,22 @@ ui <- dashboardPage(
               tabBox(
                 id = "analysis",
                 width = 12,
-                tabPanel("Summary",
+                tabPanel("Summary Statistics",
                          fillPage(
                            fillRow(
                              flex = c(2, 6),
                              wellPanel(
                                height = "100%",
-                               selectInput(
+                               selectizeInput(
                                  "variable",
                                  "Compute statistics for:",
                                  choices = names(dataset),
-                                 multiple = TRUE
+                                 multiple = TRUE,
+                                 options = list(
+                                   'plugins' = list('remove_button'),
+                                   'create' = TRUE,
+                                   'persist' = FALSE
+                                 )
                                ),
                                selectizeInput(
                                  "groupby",
@@ -113,7 +118,7 @@ ui <- dashboardPage(
                              DTOutput('statsummary')
                            ))
                          ),
-                tabPanel("Tests")
+                tabPanel("Statistical Tests")
               )
       )
     )
@@ -178,6 +183,12 @@ server <- function(input, output, session) {
   output$statsummary <- DT::renderDataTable({
     # In case you want to control for # decimal digits in future:
     # https://groups.google.com/forum/#!topic/shiny-discuss/2jlYOYFp2-A
+
+    # See radiant.data dtab.explore
+    cn_all <- colnames(statsummary())
+    cn_num <- cn_all[sapply(statsummary(), is.numeric)]
+    cn_cat <- cn_all[-which(cn_all %in% cn_num)]
+
     DT::datatable(
       statsummary(),
       filter = "top",
@@ -188,7 +199,9 @@ server <- function(input, output, session) {
         dom = "t",
         searchCols = NULL
       )
-    )
+    ) %>% DT::formatStyle(cn_cat,
+                          color = "white",
+                          backgroundColor = "grey")
   })
 
   # downloadHandler() takes two arguments, both functions.
