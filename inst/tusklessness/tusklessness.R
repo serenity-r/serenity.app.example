@@ -27,6 +27,11 @@ dataset <- elephantMorphometricsAndTuskSize %>%
          `Years of sample collection` = as.factor(`Years of sample collection`),
          `Elephant ID` = as.factor(`Elephant ID`))
 attr(dataset, "df_name") <- "elephantMorphometricsAndTuskSize"
+
+dataset_all <- colnames(dataset)
+dataset_num <- dataset_all[sapply(dataset, is.numeric)]
+dataset_cat <- dataset_all[-which(dataset_all %in% dataset_num)] # setdiff?
+
 resourcePath <- system.file("www", package = "tusklessness")
 
 ui <- dashboardPage(
@@ -76,7 +81,7 @@ ui <- dashboardPage(
                                selectizeInput(
                                  "variable",
                                  "Compute statistics for:",
-                                 choices = names(dataset),
+                                 choices = dataset_num,
                                  multiple = TRUE,
                                  options = list(
                                    'plugins' = list('remove_button'),
@@ -87,7 +92,7 @@ ui <- dashboardPage(
                                selectizeInput(
                                  "groupby",
                                  "Group by:",
-                                 choices = names(dataset),
+                                 choices = dataset_cat,
                                  multiple = TRUE,
                                  options = list(
                                    'plugins' = list('remove_button',
