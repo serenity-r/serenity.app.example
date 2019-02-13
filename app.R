@@ -16,11 +16,12 @@ library(ggplot2)
 library(magrittr)
 library(dplyr)
 library(DT)
-library(tusklessness)
 library(readr)
 
 # HTML(markdown::markdownToHTML(knitr::knit(system.file("vignettes/teaching_module.Rmd", package = "tusklessness"), quiet = TRUE)))
 teaching_mods <- c("teaching_module.md", "q1a.md")
+
+load("data/elephantMorphometricsAndTuskSize.rda")
 
 dataset <- elephantMorphometricsAndTuskSize %>%
   mutate(Sex = as.factor(Sex),
@@ -31,8 +32,6 @@ attr(dataset, "df_name") <- "elephantMorphometricsAndTuskSize"
 dataset_all <- colnames(dataset)
 dataset_num <- dataset_all[sapply(dataset, is.numeric)]
 dataset_cat <- dataset_all[-which(dataset_all %in% dataset_num)] # setdiff?
-
-resourcePath <- system.file("www", package = "tusklessness")
 
 ui <- dashboardPage(
   dashboardHeader(title = "Tusklessness"),
@@ -52,7 +51,6 @@ ui <- dashboardPage(
       )
     ),
     hr(),
-    inputPanel(
     conditionalPanel(condition = "input.sidebar == 'module'",
                      downloadButton('download', 'Download')
     ),
@@ -134,15 +132,14 @@ ui <- dashboardPage(
                                       )
                      )
     )
-    )
   ),
   dashboardBody(
     tabItems(
       # First tab content
       tabItem(tabName = "module",
-              includeMarkdown(system.file("www/teaching_module.md", package = "tusklessness")),
-              includeMarkdown(system.file("www/q1a.md", package = "tusklessness")),
-              includeMarkdown(system.file("www/loremipsum.md", package = "tusklessness")),
+              includeMarkdown("www/teaching_module.md"),
+              includeMarkdown("www/q1a.md"),
+              includeMarkdown("www/loremipsum.md"),
               textAreaInput("q1a", NULL, width="600px", rows = 6, placeholder = "Enter answer here..."),
               actionButton("getPlot", "Grab Plot"),
               plotOutput("myplot", width = "50%"),
@@ -166,7 +163,7 @@ ui <- dashboardPage(
       )
     )
   ),
-  tags$head(includeCSS(file.path(resourcePath, "app.css")))
+  tags$head(includeCSS("www/app.css"))
 )
 
 # Define server logic required to draw a histogram
@@ -310,7 +307,7 @@ server <- function(input, output, session) {
     # the argument 'file'.
     content = function(file) {
       tmp <- tempfile(fileext = ".Rmd")
-      content <- paste(purrr::map(teaching_mods, ~ read_file(system.file(paste0("www/", .), package = "tusklessness"))), collapse = "\n")
+      content <- paste(purrr::map(teaching_mods, ~ read_file(paste0("www/", .))), collapse = "\n")
       content <- paste(c(content, input$q1a), collapse = "\n")
 
       # Get plot
@@ -326,4 +323,5 @@ server <- function(input, output, session) {
 }
 
 # Run the application
-runApp(shinyApp(ui = ui, server = server), launch.browser = TRUE)
+# runApp(shinyApp(ui = ui, server = server), launch.browser = TRUE)
+shinyApp(ui = ui, server = server)
