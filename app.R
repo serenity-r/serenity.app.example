@@ -19,7 +19,7 @@ library(DT)
 library(readr)
 
 # HTML(markdown::markdownToHTML(knitr::knit(system.file("vignettes/teaching_module.Rmd", package = "tusklessness"), quiet = TRUE)))
-teaching_mods <- c("teaching_module.md", "q1a.md")
+teaching_mods <- c("teaching_module.md")
 
 load("data/elephantMorphometricsAndTuskSize.rda")
 
@@ -137,14 +137,7 @@ ui <- dashboardPage(
     tabItems(
       # First tab content
       tabItem(tabName = "module",
-              includeMarkdown("www/teaching_module.md"),
-              includeMarkdown("www/q1a.md"),
-              includeMarkdown("www/loremipsum.md"),
-              textAreaInput("q1a", NULL, width="600px", rows = 6, placeholder = "Enter answer here..."),
-              actionButton("getPlot", "Grab Plot"),
-              plotOutput("myplot", width = "50%"),
-              actionButton("getTable", "Grab Table"),
-              DTOutput('mytable')
+              includeMarkdown("www/teaching_module.md")
       ),
       tabItem(tabName = "data",
               DTOutput('table')

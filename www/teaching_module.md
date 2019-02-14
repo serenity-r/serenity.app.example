@@ -4,14 +4,21 @@ output:
     keep_md: yes
 ---
 
+<style type="text/css">
+body, td {
+   font-size: 16px;
+}
+</style>
+
 
 
 # Investigating human-induced evolution in African elephants (Loxodonta africana)
 
 Watch the HHMI BioInteractive video "Selection for Tuskless Elephants"
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IxJDUrDH9v4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" style="display: block; margin-left: auto; margin-right: auto;" src="https://www.youtube.com/embed/IxJDUrDH9v4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+<p></p>
 After you watch the video, work with your partner to answer the following:
 
  1. How has the population elephantschanged over time?
@@ -63,4 +70,9 @@ After you watch the video, work with your partner to answer the following:
  
 ## How have other African elephant populations changed in response to poaching?
 
+<div style="float: right; width: 300px; margin-left: 10px;">
+<img src="Figure1.png"><br>
+<span style="float: right">Figure 1. Photo from tusk harvest in the 1880s (Robert H Milligan, New York Public Library)</span>
+</div>
 As Joyce Poole mentioned, there are many other populations of elephants on the African continent and they may have also experienced similar selective pressures due to poaching as the populations in Gorongosa.To further investigate these effects, we will examine data comparing historical and contemporary populations of elephants along the Kenya-Tanzania border. The populations in Kenya and Tanzania are among the largest on the African continent, according to a recent census by Chase et al. (2016) (Table 2). Similar to the Gorogosa populations, these populations have experienced poaching and have suffered recent population declines (Chase et al. 2016).
+
