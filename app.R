@@ -214,30 +214,6 @@ server <- function(input, output, session) {
                              id = "explore",
                              dataset = dataset)
 
-  # User plots ----
-  plots <- reactiveValues(myplot_text = NULL)
-
-  observeEvent(input$getPlot, {
-    plots$myplot_text <- explore_plot()
-  }, ignoreInit = TRUE)
-
-  output$myplot <- renderPlot({
-    req(plots$myplot_text)
-    eval(parse(text=plots$myplot_text))
-  })
-
-  # User tables ----
-  tables <- reactiveValues(mytab = NULL)
-
-  observeEvent(input$getTable, {
-    tables$mytab <- DTstatsummary()
-  }, ignoreInit = TRUE)
-
-  output$mytable <- DT::renderDataTable({
-    req(tables$mytab)
-    tables$mytab
-  })
-
   # Main Data Table ----
   output$table <- renderDT(
     dataset,
@@ -378,7 +354,7 @@ server <- function(input, output, session) {
 
   # Summary statistics ----
   statsummary <- reactive({
-    req(input$variable, input$groupby)
+    req(input$variable)
 
     # tmp <- elephant %>% group_by(!!sym(groupby)) %>% summarize_at(vars(variable), list(Q1 = ~quantile(., probs=0.25), Q3 = ~quantile(., probs=0.75)), na.rm=TRUE)
     funmap <- list(min = min,
@@ -390,8 +366,12 @@ server <- function(input, output, session) {
     funmap <- funmap[input$statistics]
 
     # Gotta be a cleaner way then using an if statement here...
-    statsum <- dataset %>%
-      dplyr::group_by(!!!syms(input$groupby)) %>%
+    if (!is.null(input$groupby)) {
+      statsum <- dataset %>% dplyr::group_by(!!!syms(input$groupby))
+    } else {
+      statsum <- dataset
+    }
+    statsum <- statsum %>%
       dplyr::summarize_at(vars(input$variable), funmap, na.rm=TRUE)
 
     if (length(input$variable) > 1) {
