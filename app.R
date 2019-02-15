@@ -161,6 +161,19 @@ ui <- dashboardPage(
                                         value = 0.05,
                                         min = 0.01, max = 1, step = 0.01
                                       )
+                     ),
+                     conditionalPanel(condition = "input.tests == 'regression'",
+                                      selectInput(
+                                        "regression_exp",
+                                        "Explanatory Variable:",
+                                        choices = dataset_num
+                                      ),
+                                      selectInput(
+                                        "regression_res",
+                                        "Response Variable:",
+                                        choices = dataset_num,
+                                        selected = dataset_num[2]
+                                      )
                      )
     )
   ),
@@ -250,6 +263,10 @@ server <- function(input, output, session) {
            conf.level = 1-input$twosample_alpha)
   })
 
+  regression <- reactive({
+    lm(dataset[[input$regression_res]] ~ dataset[[input$regression_exp]])
+  })
+
   onesample_plot <- reactive({
     dataset %>%
       ggplot(aes(x = !!sym(input$onesample_var))) +
@@ -300,22 +317,63 @@ server <- function(input, output, session) {
                  data = conf_data)
   })
 
+  regression_plot <- reactive({
+    dataset %>%
+      ggplot(aes(x = !!sym(input$regression_exp),
+                 y = !!sym(input$regression_res))) +
+      geom_point(alpha = 0.5) +
+      geom_smooth(method = "lm")
+  })
+
   output$tests_plot <- renderPlot({
     if (input$tests == "onesample") {
       onesample_plot()
     } else
       if (input$tests == "twosample") {
         twosample_plot()
-      }
+      } else
+        if (input$tests == "regression") {
+          regression_plot()
+        }
   })
 
   output$tests_results <- renderPrint({
     if (input$tests == "onesample") {
-      onesample()
+      out <- capture.output(onesample())
+      out[-4] %>%
+        { append(., values = "", after = 4) } %>%
+        { append(., values = "", after = 6) } %>%
+        { append(., values = "", after = 9) } %>%
+        { gsub("mean of x", paste("mean of", input$twosample_res), .) } %>%
+        { cat(., sep = "\n") }
     } else
       if (input$tests == "twosample") {
-        twosample()
-      }
+        out <- capture.output(twosample())
+        out[-4] %>%
+        { append(., values = "", after = 4) } %>%
+        { append(., values = "", after = 6) } %>%
+        { append(., values = "", after = 9) } %>%
+        { cat(., sep = "\n") }
+      } else
+        if (input$tests == "regression") {
+          out <- capture.output(summary(regression()))
+          loc <- stringr::str_locate(out[10], "Estimate")[1]
+          out[12] <- stringr::str_c(input$regression_exp, "  ", stringr::str_sub(out[12], loc))
+          newloc <- stringr::str_length(input$regression_exp)+2
+          out[11] <- stringr::str_c(
+            "(Intercept)",
+            stringr::str_dup(" ", newloc - stringr::str_length("(Intercept)")),
+            stringr::str_sub(out[11], loc)
+          )
+          out[10] <- stringr::str_c(
+            stringr::str_dup(" ", newloc),
+            stringr::str_sub(out[10], loc)
+          )
+
+          out[-(1:8)] %>%
+            { append(., values = out[5:8], after = 7) } %>%
+            { cat(., sep = "\n") }
+        }
   })
 
   # Summary statistics ----
