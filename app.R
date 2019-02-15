@@ -55,48 +55,7 @@ ui <- dashboardPage(
     conditionalPanel(condition = "input.sidebar == 'module'",
                      downloadButton('download', 'Download')
     ),
-    conditionalPanel(condition = "input.sidebar == 'summaries'",
-                     selectizeInput(
-                       "variable",
-                       "Compute statistics for:",
-                       choices = dataset_num,
-                       multiple = TRUE,
-                       options = list(
-                         'plugins' = list('remove_button'),
-                         'create' = TRUE,
-                         'persist' = FALSE
-                       )
-                     ),
-                     selectizeInput(
-                       "groupby",
-                       "Group by:",
-                       choices = dataset_cat,
-                       multiple = TRUE,
-                       options = list(
-                         'plugins' = list('remove_button',
-                                          'drag_drop'),
-                         'create' = TRUE,
-                         'persist' = FALSE
-                       )
-                     ),
-                     selectizeInput(
-                       "statistics",
-                       "Statistics:",
-                       choices = c("Min" = "min",
-                                   "1st Qu." = "firstquartile",
-                                   "Median" = "median",
-                                   "Mean" = "mean",
-                                   "3rd Qu." = "thirdquartile",
-                                   "Max" = "max"),
-                       multiple = TRUE,
-                       selected = c("min", "firstquartile", "median", "mean", "thirdquartile", "max"),
-                       options = list(
-                         'plugins' = list('remove_button',
-                                          'drag_drop'),
-                         'create' = TRUE,
-                         'persist' = FALSE
-                       )
-                     )
+    conditionalPanel(condition = "input.sidebar == 'summaries'"
     ),
     conditionalPanel(condition = "input.sidebar == 'tests'",
                      selectInput(
@@ -191,7 +150,61 @@ ui <- dashboardPage(
               serenityVizUI(id = "explore", dataset = dataset, showcode = FALSE, height="700px")
       ),
       tabItem(tabName = "summaries",
-              DTOutput('statsummary')
+              fluidRow(
+                box(
+                  title = "Inputs",
+                  status = "primary",
+                  solidHeader = TRUE,
+                  width = 3,
+                  selectizeInput(
+                    "variable",
+                    "Compute statistics for:",
+                    choices = dataset_num,
+                    multiple = TRUE,
+                    options = list(
+                      'plugins' = list('remove_button'),
+                      'create' = TRUE,
+                      'persist' = FALSE
+                    )
+                  ),
+                  selectizeInput(
+                    "groupby",
+                    "Group by:",
+                    choices = dataset_cat,
+                    multiple = TRUE,
+                    options = list(
+                      'plugins' = list('remove_button',
+                                       'drag_drop'),
+                      'create' = TRUE,
+                      'persist' = FALSE
+                    )
+                  ),
+                  selectizeInput(
+                    "statistics",
+                    "Statistics:",
+                    choices = c("Min" = "min",
+                                "1st Qu." = "firstquartile",
+                                "Median" = "median",
+                                "Mean" = "mean",
+                                "3rd Qu." = "thirdquartile",
+                                "Max" = "max"),
+                    multiple = TRUE,
+                    selected = c("min", "firstquartile", "median", "mean", "thirdquartile", "max"),
+                    options = list(
+                      'plugins' = list('remove_button',
+                                       'drag_drop'),
+                      'create' = TRUE,
+                      'persist' = FALSE
+                    )
+                  )
+                ),
+                box(title = "Table",
+                    status = "info",
+                    solidHeader = TRUE,
+                    width = 9,
+                    DTOutput('statsummary')
+                )
+              )
       ),
       tabItem(tabName = "tests",
               box(title = "Visualization",
