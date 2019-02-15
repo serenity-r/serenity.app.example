@@ -272,15 +272,16 @@ server <- function(input, output, session) {
   })
 
   twosample_plot <- reactive({
+    req(input$twosample_exp, input$twosample_res)
     conf_data <- dataset %>%
       group_by(!!sym(input$twosample_exp)) %>%
       summarize(n = n(),
-                x = mean(!!sym(input$twosample_res), na.rm=T),
+                mu = mean(!!sym(input$twosample_res), na.rm=T),
                 s = sd(!!sym(input$twosample_res), na.rm=T),
                 se = s/sqrt(n),
                 tcrit = qt(p = 1-(input$twosample_alpha/2), df = n-1),
-                low = x - tcrit*se,
-                high = x + tcrit*se)
+                low = mu - tcrit*se,
+                high = mu + tcrit*se)
     dataset %>%
       ggplot(aes(x = !!sym(input$twosample_exp),
                  y = !!sym(input$twosample_res))) +
@@ -291,7 +292,12 @@ server <- function(input, output, session) {
                     width = 0.05,
                     size = 1.2,
                     colour = "blue",
-                    data = conf_data)
+                    data = conf_data) +
+      geom_point(aes(y = mu),
+                 position = position_nudge(0.2),
+                 size = 2,
+                 colour = "green",
+                 data = conf_data)
   })
 
   output$tests_plot <- renderPlot({
