@@ -139,7 +139,6 @@ ui <- dashboardPage(
   # Dashboard Body ----
   dashboardBody(
     tabItems(
-      # First tab content
       tabItem(tabName = "module",
               includeMarkdown("www/teaching_module.md")
       ),
@@ -150,60 +149,58 @@ ui <- dashboardPage(
               serenityVizUI(id = "explore", dataset = dataset, showcode = FALSE, height="700px")
       ),
       tabItem(tabName = "summaries",
-              fluidRow(
-                box(
-                  title = "Inputs",
-                  status = "primary",
-                  solidHeader = TRUE,
-                  width = 3,
-                  selectizeInput(
-                    "variable",
-                    "Compute statistics for:",
-                    choices = dataset_num,
-                    multiple = TRUE,
-                    options = list(
-                      'plugins' = list('remove_button'),
-                      'create' = TRUE,
-                      'persist' = FALSE
-                    )
-                  ),
-                  selectizeInput(
-                    "groupby",
-                    "Group by:",
-                    choices = dataset_cat,
-                    multiple = TRUE,
-                    options = list(
-                      'plugins' = list('remove_button',
-                                       'drag_drop'),
-                      'create' = TRUE,
-                      'persist' = FALSE
-                    )
-                  ),
-                  selectizeInput(
-                    "statistics",
-                    "Statistics:",
-                    choices = c("Min" = "min",
-                                "1st Qu." = "firstquartile",
-                                "Median" = "median",
-                                "Mean" = "mean",
-                                "3rd Qu." = "thirdquartile",
-                                "Max" = "max"),
-                    multiple = TRUE,
-                    selected = c("min", "firstquartile", "median", "mean", "thirdquartile", "max"),
-                    options = list(
-                      'plugins' = list('remove_button',
-                                       'drag_drop'),
-                      'create' = TRUE,
-                      'persist' = FALSE
-                    )
+              box(
+                title = "Inputs",
+                status = "primary",
+                solidHeader = TRUE,
+                width = 3,
+                selectizeInput(
+                  "variable",
+                  "Compute statistics for:",
+                  choices = dataset_num,
+                  multiple = TRUE,
+                  options = list(
+                    'plugins' = list('remove_button'),
+                    'create' = TRUE,
+                    'persist' = FALSE
                   )
                 ),
-                box(title = "Table",
-                    status = "info",
-                    solidHeader = TRUE,
-                    width = 9,
-                    DTOutput('statsummary')
+                selectizeInput(
+                  "groupby",
+                  "Group by:",
+                  choices = dataset_cat,
+                  multiple = TRUE,
+                  options = list(
+                    'plugins' = list('remove_button',
+                                     'drag_drop'),
+                    'create' = TRUE,
+                    'persist' = FALSE
+                  )
+                ),
+                selectizeInput(
+                  "statistics",
+                  "Statistics:",
+                  choices = c("Min" = "min",
+                              "1st Qu." = "firstquartile",
+                              "Median" = "median",
+                              "Mean" = "mean",
+                              "3rd Qu." = "thirdquartile",
+                              "Max" = "max"),
+                  multiple = TRUE,
+                  selected = c("min", "firstquartile", "median", "mean", "thirdquartile", "max"),
+                  options = list(
+                    'plugins' = list('remove_button',
+                                     'drag_drop'),
+                    'create' = TRUE,
+                    'persist' = FALSE
+                  )
                 )
+              ),
+              box(title = "Table",
+                  status = "info",
+                  solidHeader = TRUE,
+                  width = 9,
+                  DTOutput('statsummary')
               )
       ),
       tabItem(tabName = "tests",
@@ -234,7 +231,10 @@ server <- function(input, output, session) {
     rownames = FALSE,
     style = "bootstrap",
     selection = "none",
-    options = list(server = FALSE)
+    extensions = 'Scroller',
+    options = list(scrollY = 400,
+                   deferRender = FALSE,
+                   scroller = TRUE)
     )
 
   # Statistical Tests ----
