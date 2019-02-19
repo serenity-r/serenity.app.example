@@ -12,6 +12,7 @@ library(serenity.viz)
 
 # Define UI for application that draws a histogram
 library(shinydashboard)
+library(shinydashboardPlus)
 library(ggplot2)
 library(magrittr)
 library(dplyr)
@@ -33,8 +34,13 @@ dataset_all <- colnames(dataset)
 dataset_num <- dataset_all[sapply(dataset, is.numeric)]
 dataset_cat <- dataset_all[-which(dataset_all %in% dataset_num)] # setdiff?
 
-ui <- dashboardPage(
-  dashboardHeader(title = "Tusklessness"),
+ui <- dashboardPagePlus(
+  dashboardHeaderPlus(
+    title = tagList(
+      span(class = "logo-lg", "Tusklessness"),
+      img(src = "")
+    )
+  ),
   # Dashboard Sidebar ----
   dashboardSidebar(
     sidebarMenu(
@@ -51,14 +57,7 @@ ui <- dashboardPage(
                            tabName = "tests")
       )
     ),
-    hr(),
-    conditionalPanel(condition = "input.sidebar == 'module'",
-                     downloadButton('download', 'Download')
-    ),
-    conditionalPanel(condition = "input.sidebar == 'summaries'"
-    ),
-    conditionalPanel(condition = "input.sidebar == 'tests'"
-    )
+    hr()
   ),
   # Dashboard Body ----
   dashboardBody(
@@ -118,7 +117,13 @@ ui <- dashboardPage(
                     'create' = TRUE,
                     'persist' = FALSE
                   )
-                )
+                ),
+                numericInput("sigdigs",
+                             "Decimals:",
+                             3,
+                             min = 0,
+                             max = 10,
+                             step = 1)
               ),
               box(title = "Table",
                   status = "info",
@@ -138,7 +143,6 @@ ui <- dashboardPage(
                   "Please select a test:",
                   choices = c("One-Sample T-Test" = "onesample",
                               "Two-Sample T-Test" = "twosample",
-                              "ANOVA" = "anova",
                               "Linear Regression" = "regression")
                 ),
                 conditionalPanel(condition = "input.tests == 'onesample'",
@@ -428,7 +432,8 @@ server <- function(input, output, session) {
       )
     ) %>% DT::formatStyle(cn_cat,
                           color = "white",
-                          backgroundColor = "grey")
+                          backgroundColor = "grey") %>%
+      formatRound(columns=cn_num, digits=input$sigdigs)
   })
 
   output$statsummary <- DT::renderDataTable({
