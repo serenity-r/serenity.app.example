@@ -57,83 +57,7 @@ ui <- dashboardPage(
     ),
     conditionalPanel(condition = "input.sidebar == 'summaries'"
     ),
-    conditionalPanel(condition = "input.sidebar == 'tests'",
-                     selectInput(
-                       "tests",
-                       "Please select a test:",
-                       choices = c("One-Sample T-Test" = "onesample",
-                                   "Two-Sample T-Test" = "twosample",
-                                   "ANOVA" = "anova",
-                                   "Linear Regression" = "regression")
-                     ),
-                     conditionalPanel(condition = "input.tests == 'onesample'",
-                                      selectInput(
-                                        "onesample_var",
-                                        "Variable:",
-                                        choices = dataset_num
-                                        ),
-                                      numericInput(
-                                        "onesample_null",
-                                        "Null Value:",
-                                        value = 0
-                                        ),
-                                      selectInput(
-                                        "onesample_side",
-                                        "One or Two Sided:",
-                                        choices = c("Two sided" = "two.sided",
-                                                    "One sided: Less" = "less",
-                                                    "One sided: Greater" = "greater")
-                                      ),
-                                      sliderInput(
-                                        "onesample_alpha",
-                                        "Significance Level:",
-                                        value = 0.05,
-                                        min = 0.01, max = 1, step = 0.01
-                                      )
-                     ),
-                     conditionalPanel(condition = "input.tests == 'twosample'",
-                                      selectInput(
-                                        "twosample_exp",
-                                        "Explanatory Variable:",
-                                        choices = dataset_cat
-                                      ),
-                                      selectInput(
-                                        "twosample_res",
-                                        "Response Variable:",
-                                        choices = dataset_num
-                                      ),
-                                      numericInput(
-                                        "twosample_null",
-                                        "Null Value:",
-                                        value = 0
-                                      ),
-                                      selectInput(
-                                        "twosample_side",
-                                        "One or Two Sided:",
-                                        choices = c("Two sided" = "two.sided",
-                                                    "One sided: Less" = "less",
-                                                    "One sided: Greater" = "greater")
-                                      ),
-                                      sliderInput(
-                                        "twosample_alpha",
-                                        "Significance Level:",
-                                        value = 0.05,
-                                        min = 0.01, max = 1, step = 0.01
-                                      )
-                     ),
-                     conditionalPanel(condition = "input.tests == 'regression'",
-                                      selectInput(
-                                        "regression_exp",
-                                        "Explanatory Variable:",
-                                        choices = dataset_num
-                                      ),
-                                      selectInput(
-                                        "regression_res",
-                                        "Response Variable:",
-                                        choices = dataset_num,
-                                        selected = dataset_num[2]
-                                      )
-                     )
+    conditionalPanel(condition = "input.sidebar == 'tests'"
     )
   ),
   # Dashboard Body ----
@@ -204,14 +128,99 @@ ui <- dashboardPage(
               )
       ),
       tabItem(tabName = "tests",
+              box(
+                title = "Inputs",
+                status = "primary",
+                solidHeader = TRUE,
+                width = 3,
+                selectInput(
+                  "tests",
+                  "Please select a test:",
+                  choices = c("One-Sample T-Test" = "onesample",
+                              "Two-Sample T-Test" = "twosample",
+                              "ANOVA" = "anova",
+                              "Linear Regression" = "regression")
+                ),
+                conditionalPanel(condition = "input.tests == 'onesample'",
+                                 selectInput(
+                                   "onesample_var",
+                                   "Variable:",
+                                   choices = dataset_num
+                                 ),
+                                 numericInput(
+                                   "onesample_null",
+                                   "Null Value:",
+                                   value = 0
+                                 ),
+                                 selectInput(
+                                   "onesample_side",
+                                   "One or Two Sided:",
+                                   choices = c("Two sided" = "two.sided",
+                                               "One sided: Less" = "less",
+                                               "One sided: Greater" = "greater")
+                                 ),
+                                 sliderInput(
+                                   "onesample_alpha",
+                                   "Significance Level:",
+                                   value = 0.05,
+                                   min = 0.01, max = 1, step = 0.01
+                                 )
+                ),
+                conditionalPanel(condition = "input.tests == 'twosample'",
+                                 selectInput(
+                                   "twosample_exp",
+                                   "Explanatory Variable:",
+                                   choices = dataset_cat
+                                 ),
+                                 selectInput(
+                                   "twosample_res",
+                                   "Response Variable:",
+                                   choices = dataset_num
+                                 ),
+                                 numericInput(
+                                   "twosample_null",
+                                   "Null Value:",
+                                   value = 0
+                                 ),
+                                 selectInput(
+                                   "twosample_side",
+                                   "One or Two Sided:",
+                                   choices = c("Two sided" = "two.sided",
+                                               "One sided: Less" = "less",
+                                               "One sided: Greater" = "greater")
+                                 ),
+                                 sliderInput(
+                                   "twosample_alpha",
+                                   "Significance Level:",
+                                   value = 0.05,
+                                   min = 0.01, max = 1, step = 0.01
+                                 )
+                ),
+                conditionalPanel(condition = "input.tests == 'regression'",
+                                 selectInput(
+                                   "regression_exp",
+                                   "Explanatory Variable:",
+                                   choices = dataset_num
+                                 ),
+                                 selectInput(
+                                   "regression_res",
+                                   "Response Variable:",
+                                   choices = dataset_num,
+                                   selected = dataset_num[2]
+                                 )
+                )
+              ),
               box(title = "Visualization",
-                  status = "primary",
+                  status = "info",
                   solidHeader = TRUE,
+                  width = 5,
                   plotOutput("tests_plot")),
               box(title = "Results",
-                  status = "primary",
+                  status = "info",
                   solidHeader = TRUE,
-                  verbatimTextOutput("tests_results"))
+                  width = 4,
+                  verbatimTextOutput("tests_results")
+              )
       )
     )
   ),
