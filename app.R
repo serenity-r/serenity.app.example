@@ -18,6 +18,7 @@ library(magrittr)
 library(dplyr)
 library(DT)
 library(readr)
+library(bsplus)
 
 # HTML(markdown::markdownToHTML(knitr::knit(system.file("vignettes/teaching_module.Rmd", package = "tusklessness"), quiet = TRUE)))
 teaching_mods <- c("teaching_module.md")
