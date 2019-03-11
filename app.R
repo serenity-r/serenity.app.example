@@ -29,7 +29,10 @@ load("data/elephantMorphometricsAndTuskSize.rda")
 dataset <- elephantMorphometricsAndTuskSize %>%
   mutate(Sex = as.factor(Sex),
          `Years of sample collection` = as.factor(`Years of sample collection`),
-         `Elephant ID` = as.factor(`Elephant ID`))
+         `Elephant ID` = as.factor(`Elephant ID`)) %>%
+  rename(`Shoulder Height (cm)` = `shoulder Height in  cm`,
+         `Tusk Length (cm)` = `Tusk Length in cm`,
+         `Tusk Circumference (cm)` = `Tusk Circumference   in cm`)
 attr(dataset, "df_name") <- "elephantMorphometricsAndTuskSize"
 
 dataset_all <- colnames(dataset)

@@ -25,14 +25,12 @@ library(kableExtra)
 Watch the HHMI BioInteractive video "Selection for Tuskless Elephants"
 
 <iframe width="560" height="315" style="display: block; margin-left: auto; margin-right: auto;" src="https://www.youtube.com/embed/IxJDUrDH9v4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
- 
-## How have other African elephant populations changed in response to poaching?
-
+<br><br>
 <div style="float: right; width: 300px; margin-left: 10px;">
 <img src="Figure1.png"><br>
 <span style="float: right">Figure 1. Photo from tusk harvest in the 1880s (Robert H Milligan, New York Public Library)</span>
 </div>
-As Joyce Poole mentioned, there are many other populations of elephants on the African continent and they may have also experienced similar selective pressures due to poaching as the populations in Gorongosa.To further investigate these effects, we will examine data comparing historical and contemporary populations of elephants along the Kenya-Tanzania border. The populations in Kenya and Tanzania are among the largest on the African continent, according to a recent census by Chase et al. (2016) (Table 1). Similar to the Gorogosa populations, these populations have experienced poaching and have suffered recent population declines (Chase et al. 2016).<br><br>
+As Joyce Poole mentioned, there are many other populations of elephants on the African continent and they may have also experienced similar selective pressures due to poaching as the populations in Gorongosa.  To further investigate these effects, we will examine data comparing historical and contemporary populations of elephants along the Kenya-Tanzania border. The populations in Kenya and Tanzania are among the largest on the African continent, according to a recent census by Chase et al. (2016) (Table 1). Similar to the Gorogosa populations, these populations have experienced poaching and have suffered recent population declines (Chase et al. 2016).<br><br>
 ```{r, echo=FALSE}
 table1 <- data.frame(Country = c("Angola", "Botswana", "Cameroon", "Chad", "DR Congo", "Ethiopia", "Kenya", "Malawi", "Mali", "Mozambique", "South Africa", "Tanzania", "Uganda", "W. Africa", "Zambia", "Zimbabwe", "TOTAL"), 
                      Elephants = c(3395, 130451, 148, 743, 1959, 799, 25959, 817, 253, 9605, 17433, 42871, 4864, 8911, 21759, 82304, 352271),
@@ -52,12 +50,22 @@ kable(table1,
   row_spec(1:17, background = "white")
 ```
 <br><br><br><br>
-Chiyo et al. (2015) investigated changes in populations of Loxodonta africana located along the Kenya-Tanzania border between the 1960s and the 2000s.    Rather than observing tusklessness like Dr. Poole, Chiyo et al. (2015) examined evidence of subtler changes in tusk morphology over time due to poaching.  They used Historical records to collect height (estimated to the shoulder), tusk length, and tusk circumference from approximately 600 elephants that were culled in Tsavo East National Park (Kenya) and Mkomazi National Park (Tanzania) between 1966 and 1968.  Figure 2 is an example of the historical records used in the study (for more information see: http://ufdc.ufl.edu/AA00013409/00007).  Contemporary data were collected from live animals that were translocated from southern Kenya to Tsavo East National Park (2005), Masai Mara National Reserve (2011), and Meru National Park (2013).<br><br>
+Chiyo et al. (2015) investigated changes in populations of Loxodonta africana located along the Kenya-Tanzania border between the 1960s and the 2000s.    Rather than observing tusklessness like Dr. Poole, Chiyo et al. (2015) examined evidence of subtler changes in tusk morphology over time due to poaching.  They used Historical records to collect height (estimated to the shoulder), tusk length, and tusk circumference from approximately 600 elephants that were culled in Tsavo East National Park (Kenya) and Mkomazi National Park (Tanzania) between 1966 and 1968.  Figure 2 is an example of the historical records used in the study (for more information see: http://ufdc.ufl.edu/AA00013409/00007).  For contemporary data, they then made similar measurements on live animals that were translocated from southern Kenya to Tsavo East National Park in 2005, Masai Mara National Reserve in 2011, and Meru National Park in 2013. These measurements were made while the elephants were anesthetized and recumbent (lying on their sides).<br><br>
 <div style="float: right; width: 400px; margin-left: 10px; margin-top: 10px;">
 <img src="Figure2.png"><br>
 <span style="float: right">Figure 2. Example of historical records of elephant morphology used by Chiyo <emph>et al.</emph> (2015)</span>
 </div>
 <div style="clear:both;"></div>
+<br>
+The data table in this application has the following columns:
+
+ 1. Years of sample collection. The data are from two time periods: 1966-1968 and 2005-2013.
+ 2.	Elephant ID. The elephants were assigned IDs of one to three numerical or alphabetical characters (for example, 12, 241, and NEL).
+ 3.	Sex. This indicates whether the elephant was female (f) or male (m).
+ 4.	Estimated age (years). The age of the elephant at the time the measurements were made.
+ 5.	Shoulder height (cm). The height of the elephant, measured from the sole of the foot to the crest of the shoulder blade (scapula).
+ 6.	Tusk length (cm). The length of the exposed portion of the tusk, measured from the tusk tip to the lip line.
+ 7.	Tusk circumference (cm). The circumference of the tusk at the lip line.
 
 ## References
 
