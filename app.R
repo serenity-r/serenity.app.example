@@ -1,11 +1,6 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# --------------------
+# Serenity App Example
+# --------------------
 
 library(shiny)
 library(serenity.viz)
@@ -21,11 +16,31 @@ library(readr)
 library(bsplus)
 library(colourpicker)
 
-# HTML(markdown::markdownToHTML(knitr::knit(system.file("vignettes/teaching_module.Rmd", package = "tusklessness"), quiet = TRUE)))
+# Load in the teaching module
+# ---------------------------
+# To edit the teaching module, work in the www/teaching_module.Rmd file and then knit.)
 teaching_mods <- c("teaching_module.md")
 
+# Load in the data
+# ----------------
+# To save your own dataset, load it into R as a data frame (e.g. by read.csv or
+#   readr::read_csv) and then save it as an rda file using the command
+#
+#     save("mydata", file="data/mydata.rda")
+#
+#   where "mydata" is the name of your data frame variable in R.
 load("data/elephantMorphometricsAndTuskSize.rda")
 
+# Manipulate the data
+# -------------------
+# Perform any data manipulations here. These could have been performed prior
+#   to saving in the previous step, but I'm doing it here so I can keep the
+#   data in raw form with the app.  Even if there are no data manipulations,
+#   you need to save the resulting data frame in the variable dataset like so:
+#
+#     dataset <- mydata
+#
+#   Again, mydata is the name of the data set variable in R.
 dataset <- elephantMorphometricsAndTuskSize %>%
   mutate(Sex = as.factor(Sex),
          `Years of sample collection` = as.factor(`Years of sample collection`),
@@ -33,6 +48,13 @@ dataset <- elephantMorphometricsAndTuskSize %>%
   rename(`Shoulder Height (cm)` = `shoulder Height in  cm`,
          `Tusk Length (cm)` = `Tusk Length in cm`,
          `Tusk Circumference (cm)` = `Tusk Circumference   in cm`)
+# This next line is important. Put in the name of the data frame that was loaded
+#   prior to renaming to dataset.  This name is used whenever the automatic
+#   code is created in the app.  So, if "mydata" is the name of your data frame
+#   in R, then it will be
+#
+#     attr(dataset, "df_name") <- "mydata"
+#
 attr(dataset, "df_name") <- "elephantMorphometricsAndTuskSize"
 
 dataset_all <- colnames(dataset)
@@ -42,7 +64,7 @@ dataset_cat <- dataset_all[-which(dataset_all %in% dataset_num)] # setdiff?
 ui <- dashboardPagePlus(
   dashboardHeaderPlus(
     title = tagList(
-      span(class = "logo-lg", "Tusklessness"),
+      span(class = "logo-lg", "Serenity App Example"),
       img(src = "")
     )
   ),
@@ -476,5 +498,4 @@ server <- function(input, output, session) {
 }
 
 # Run the application
-# runApp(shinyApp(ui = ui, server = server), launch.browser = TRUE)
 shinyApp(ui = ui, server = server)
